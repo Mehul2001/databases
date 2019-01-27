@@ -1,3 +1,5 @@
+// spec/server-spec.js contains a mocha spec for testing your Node server's ability to read and write the database. This spec is not complete! It contains several lines commented with "TODO". You'll be customizing those lines to match the details of the database tables you create
+
 /* You'll need to have MySQL running and your Node server running
  * for these tests to pass. */
 
@@ -5,22 +7,36 @@ var mysql = require('mysql');
 var request = require('request'); // You might need to npm install the request module!
 var expect = require('chai').expect;
 
+// checking to see if data persists
 describe('Persistent Node Chat Server', function() {
   var dbConnection;
 
   beforeEach(function(done) {
+    // creating a connection with the database
     dbConnection = mysql.createConnection({
       user: 'student',
       password: 'student',
       database: 'chat'
     });
+    // invoking the connection
     dbConnection.connect();
-
-       var tablename = ""; // TODO: fill this out
+  
+//////// TODO: CHECK OUR WORK BELOW ///////////
+      // we think it's the messages table because this is 
+      // where all of our data is stored - 
+      // if the server shuts down, we can get all of the info back
+      // from messages
+      // messages makes references to users, messages, id, etc
+      var tablename = 'messages'; // TODO: fill this out
 
     /* Empty the db table before each test so that multiple tests
      * (or repeated runs of the tests) won't screw each other up: */
-    dbConnection.query('truncate ' + tablename, done);
+    // TRUNCATE empties a table completely
+    // we are emptying the database, in this case, the messages table
+    // .query reads from/write to a mySQL database &&
+    // in this case, our understanding is that it writes into 
+    // the mysql database (deleting the tables)
+     dbConnection.query('truncate ' + tablename, done);
   });
 
   afterEach(function() {
@@ -67,7 +83,7 @@ describe('Persistent Node Chat Server', function() {
 
   it('Should output all messages from the DB', function(done) {
     // Let's insert a message into the db
-       var queryString = "";
+       var queryString = "INSERT INTO messages (text) VALUE ('Men like you can never change!')";
        var queryArgs = [];
     // TODO - The exact query string and query args to use
     // here depend on the schema you design, so I'll leave
